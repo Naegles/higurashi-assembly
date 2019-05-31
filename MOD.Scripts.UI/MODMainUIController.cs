@@ -32,31 +32,31 @@ namespace MOD.Scripts.UI
 
 		private static int ADVModeFontID;
 
-		private static string ADVModeTextbox2NameFormat;
+		private static string Textbox3NameFormat;
 
-		private static int ADVModeTextbox2WindowPosX;
+		private static int Textbox3WindowPosX;
 
-		private static int ADVModeTextbox2WindowPosY;
+		private static int Textbox3WindowPosY;
 
-		private static int ADVModeTextbox2WindowSizeX;
+		private static int Textbox3WindowSizeX;
 
-		private static int ADVModeTextbox2WindowSizeY;
+		private static int Textbox3WindowSizeY;
 
-		private static int ADVModeTextbox2LineSpacing;
+		private static int Textbox3LineSpacing;
 
-		private static int ADVModeTextbox2CharSpacing;
+		private static int Textbox3CharSpacing;
 
-		private static int ADVModeTextbox2FontSize;
+		private static int Textbox3FontSize;
 
-		private static int ADVModeTextbox2WindowMarginLeft;
+		private static int Textbox3WindowMarginLeft;
 
-		private static int ADVModeTextbox2WindowMarginTop;
+		private static int Textbox3WindowMarginTop;
 
-		private static int ADVModeTextbox2WindowMarginRight;
+		private static int Textbox3WindowMarginRight;
 
-		private static int ADVModeTextbox2WindowMarginBottom;
+		private static int Textbox3WindowMarginBottom;
 
-		private static int ADVModeTextbox2FontID;
+		private static int Textbox3FontID;
 
 		private static string NVLModeNameFormat;
 
@@ -125,7 +125,7 @@ namespace MOD.Scripts.UI
 			ADVModeCharSpacing = cspace;
 			ADVModeLineSpacing = lspace;
 			ADVModeFontSize = fsize;
-			if (BurikoMemory.Instance.GetGlobalFlag("GADVTextbox").IntValue() == 0)
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
 			{
 				if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 1)
 				{
@@ -135,27 +135,28 @@ namespace MOD.Scripts.UI
 			}
 		}
 
-		public void ADVModeTextbox2SettingLoad(string name, int posx, int posy, int sizex, int sizey, int mleft, int mtop, int mright, int mbottom, int font, int cspace, int lspace, int fsize)
+
+		public void Textbox3SettingLoad(string name, int posx, int posy, int sizex, int sizey, int mleft, int mtop, int mright, int mbottom, int font, int cspace, int lspace, int fsize)
 		{
-			ADVModeTextbox2NameFormat = name;
-			ADVModeTextbox2WindowPosX = posx;
-			ADVModeTextbox2WindowPosY = posy;
-			ADVModeTextbox2WindowSizeX = sizex;
-			ADVModeTextbox2WindowSizeY = sizey;
-			ADVModeTextbox2WindowMarginLeft = mleft;
-			ADVModeTextbox2WindowMarginTop = mtop;
-			ADVModeTextbox2WindowMarginRight = mright;
-			ADVModeTextbox2WindowMarginBottom = mbottom;
-			ADVModeTextbox2FontID = font;
-			ADVModeTextbox2CharSpacing = cspace;
-			ADVModeTextbox2LineSpacing = lspace;
-			ADVModeTextbox2FontSize = fsize;
-			if (BurikoMemory.Instance.GetGlobalFlag("GADVTextbox").IntValue() == 1)
+			Textbox3NameFormat = name;
+			Textbox3WindowPosX = posx;
+			Textbox3WindowPosY = posy;
+			Textbox3WindowSizeX = sizex;
+			Textbox3WindowSizeY = sizey;
+			Textbox3WindowMarginLeft = mleft;
+			Textbox3WindowMarginTop = mtop;
+			Textbox3WindowMarginRight = mright;
+			Textbox3WindowMarginBottom = mbottom;
+			Textbox3FontID = font;
+			Textbox3CharSpacing = cspace;
+			Textbox3LineSpacing = lspace;
+			Textbox3FontSize = fsize;
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
 			{
 				if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 1)
 				{
 					BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 0);
-					ADVModeTextbox2SettingStore();
+					Textbox3SettingStore();
 				}
 			}
 		}
@@ -175,10 +176,13 @@ namespace MOD.Scripts.UI
 			NVLModeCharSpacing = cspace;
 			NVLModeLineSpacing = lspace;
 			NVLModeFontSize = fsize;
-			if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() != 1)
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
 			{
-				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 2);
-				NVLModeSettingStore();
+				if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 0)
+				{
+					BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 2);
+					NVLModeSettingStore();
+				}
 			}
 		}
 
@@ -224,21 +228,21 @@ namespace MOD.Scripts.UI
 			GameSystem.Instance.MainUIController.SetFontSize(aDVModeFontSize);
 		}
 
-		public void ADVModeTextbox2SettingStore()
+		public void Textbox3SettingStore()
 		{
-			string aDVModeNameFormat = ADVModeTextbox2NameFormat;
-			int aDVModeWindowPosX = ADVModeTextbox2WindowPosX;
-			int aDVModeWindowPosY = ADVModeTextbox2WindowPosY;
-			int aDVModeWindowSizeX = ADVModeTextbox2WindowSizeX;
-			int aDVModeWindowSizeY = ADVModeTextbox2WindowSizeY;
-			int aDVModeWindowMarginLeft = ADVModeTextbox2WindowMarginLeft;
-			int aDVModeWindowMarginTop = ADVModeTextbox2WindowMarginTop;
-			int aDVModeWindowMarginRight = ADVModeTextbox2WindowMarginRight;
-			int aDVModeWindowMarginBottom = ADVModeTextbox2WindowMarginBottom;
-			int aDVModeFontID = ADVModeTextbox2FontID;
-			int aDVModeCharSpacing = ADVModeTextbox2CharSpacing;
-			int aDVModeLineSpacing = ADVModeTextbox2LineSpacing;
-			int aDVModeFontSize = ADVModeTextbox2FontSize;
+			string aDVModeNameFormat = Textbox3NameFormat;
+			int aDVModeWindowPosX = Textbox3WindowPosX;
+			int aDVModeWindowPosY = Textbox3WindowPosY;
+			int aDVModeWindowSizeX = Textbox3WindowSizeX;
+			int aDVModeWindowSizeY = Textbox3WindowSizeY;
+			int aDVModeWindowMarginLeft = Textbox3WindowMarginLeft;
+			int aDVModeWindowMarginTop = Textbox3WindowMarginTop;
+			int aDVModeWindowMarginRight = Textbox3WindowMarginRight;
+			int aDVModeWindowMarginBottom = Textbox3WindowMarginBottom;
+			int aDVModeFontID = Textbox3FontID;
+			int aDVModeCharSpacing = Textbox3CharSpacing;
+			int aDVModeLineSpacing = Textbox3LineSpacing;
+			int aDVModeFontSize = Textbox3FontSize;
 			GameSystem.Instance.TextController.NameFormat = aDVModeNameFormat;
 			GameSystem.Instance.MainUIController.SetWindowPos(aDVModeWindowPosX, aDVModeWindowPosY);
 			GameSystem.Instance.MainUIController.SetWindowSize(aDVModeWindowSizeX, aDVModeWindowSizeY);

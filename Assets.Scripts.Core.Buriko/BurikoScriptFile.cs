@@ -2160,9 +2160,9 @@ namespace Assets.Scripts.Core.Buriko
 				return OperationMODGetHighestChapterFlag();
 			case BurikoOperations.ModSetMainFontOutlineWidth:
 				return OperationMODSetMainFontOutlineWidth();
-			case BurikoOperations.ModADVModeTextbox2SettingLoad:
-				return OperationMODADVModeTextbox2SettingLoad();
-				default:
+			case BurikoOperations.ModTextbox3SettingLoad:
+				return OperationMODTextbox3SettingLoad();
+			default:
 				ScriptError("Unhandled Operation : " + op);
 				return BurikoVariable.Null;
 			}
@@ -2326,9 +2326,9 @@ namespace Assets.Scripts.Core.Buriko
 			return BurikoVariable.Null;
 		}
 
-		public BurikoVariable OperationMODADVModeTextbox2SettingLoad()
+		public BurikoVariable OperationMODTextbox3SettingLoad()
 		{
-			SetOperationType("ModADVModeTextbox2SettingLoad");
+			SetOperationType("ModTextbox3SettingLoad");
 			MODMainUIController mODMainUIController = new MODMainUIController();
 			string name = ReadVariable().StringValue();
 			int posx = ReadVariable().IntValue();
@@ -2343,7 +2343,7 @@ namespace Assets.Scripts.Core.Buriko
 			int cspace = ReadVariable().IntValue();
 			int lspace = ReadVariable().IntValue();
 			int fsize = ReadVariable().IntValue();
-			mODMainUIController.ADVModeTextbox2SettingLoad(name, posx, posy, sizex, sizey, mleft, mtop, mright, mbottom, font, cspace, lspace, fsize);
+			mODMainUIController.Textbox3SettingLoad(name, posx, posy, sizex, sizey, mleft, mtop, mright, mbottom, font, cspace, lspace, fsize);
 			return BurikoVariable.Null;
 		}
 

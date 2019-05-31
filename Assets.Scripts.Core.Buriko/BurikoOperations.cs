@@ -140,6 +140,6 @@ namespace Assets.Scripts.Core.Buriko
 		ModSetHighestChapterFlag,
 		ModGetHighestChapterFlag,
 		ModSetMainFontOutlineWidth,
-		ModADVModeTextbox2SettingLoad
+		ModTextbox3SettingLoad
 	}
 }
