@@ -409,6 +409,10 @@ namespace Assets.Scripts.Core.State
 					if (num9 < num10 && num9 >= 0)
 					{
 						num9++;
+						string str7 = num9.ToString();
+						string str8 = ".ogg";
+						string filename4 = "switchsound/" + str7 + str8;
+						GameSystem.Instance.AudioController.PlaySystemSound(filename4);
 						BurikoMemory.Instance.SetGlobalFlag("GAltBGMflow", num9);
 						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 0)
 						{
@@ -434,16 +438,8 @@ namespace Assets.Scripts.Core.State
 							}
 							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5 && File.Exists("Anime\\" + OG_BGM))
 							{
-								if (Directory.Exists(AnimeBGMFolder))
-								{
-									AudioController.Instance.PlayAudio("Anime\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								else
-								{
-									num9 = 0;
-								}
+								AudioController.Instance.PlayAudio("Anime\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
 							}
-
 						}
 						return true;
 					}
