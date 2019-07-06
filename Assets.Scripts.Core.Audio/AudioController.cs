@@ -274,57 +274,6 @@ namespace Assets.Scripts.Core.Audio
 			audioLayerUnity.PlayAudio(filename, AudioType.SE, volume);
 		}
 
-		public void MODGetSE(string filename1, string filename2, string filename3, AudioType type, int channel, float volume, float fadeintime = 0)
-		{
-			float startvolume = volume;
-			if (fadeintime > 0f)
-			{
-				fadeintime /= 1000f;
-				startvolume = 0f;
-			}
-			AudioLayerUnity audioLayerUnity = channelDictionary[GetChannelByTypeChannel(type, channel)];
-			if (type == AudioType.BGM)
-			{
-				if (currentAudio[AudioType.BGM].ContainsKey(channel))
-				{
-					currentAudio[AudioType.BGM].Remove(channel);
-				}
-			}
-		}
-
-		public void MODPlaySE(string OG_SEfilename, string Console_SEfilename, string MG_SEfilename, int channel, float volume, float pan)
-		{
-			AudioLayerUnity audioLayerUnity = channelDictionary[GetChannelByTypeChannel(AudioType.SE, channel)];
-			if (audioLayerUnity.IsPlaying())
-			{
-				audioLayerUnity.StopAudio();
-			}
-			if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
-			{
-				audioLayerUnity.PlayAudio(OG_SEfilename + ".ogg", AudioType.SE, volume);
-			}
-			if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
-			{
-				audioLayerUnity.PlayAudio("Original" + OG_SEfilename + ".ogg", AudioType.SE, volume);
-			}
-			if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
-			{
-				audioLayerUnity.PlayAudio("April2019Update" + OG_SEfilename + ".ogg", AudioType.SE, volume);
-			}
-			if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
-			{
-				audioLayerUnity.PlayAudio(Console_SEfilename + ".ogg", AudioType.SE, volume);
-			}
-			if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
-			{
-				audioLayerUnity.PlayAudio(MG_SEfilename + ".ogg", AudioType.SE, volume);
-			}
-			//if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5)
-			//{
-			//	audioLayerUnity.PlayAudio("Anime\\" + OG_SEfilename, AudioType.SE, volume);
-			//}
-		}
-
 		public void StopSE(int channel)
 		{
 			AudioLayerUnity audioLayerUnity = channelDictionary[GetChannelByTypeChannel(AudioType.SE, channel)];
