@@ -46,6 +46,27 @@ namespace Assets.Scripts.Core.Buriko
 
 		public int Position => (int)dataStream.Position;
 
+		public static BurikoScriptFile Instance
+		{
+			get;
+			private set;
+		}
+
+		public static int Channel;
+
+		public static float Volume;
+
+		public static string OG_BGMFilename;
+
+		public static string Console_BGMFilename;
+
+		public static string MG_BGMFilename;
+
+		public static string Italofolder;
+
+		public static float Fade;
+
+
 		public BurikoScriptFile(BurikoScriptSystem system, string filename)
 		{
 			scriptSystem = system;
@@ -453,6 +474,82 @@ namespace Assets.Scripts.Core.Buriko
 			return BurikoVariable.Null;
 		}
 
+		public BurikoVariable OperationMODPlayBGM()
+		{
+			SetOperationType("ModPlayBGM");
+			int channel = ReadVariable().IntValue();
+			string OG_BGMfilename = ReadVariable().StringValue() + ".ogg";
+			string Console_BGMfilename = ReadVariable().StringValue() + ".ogg";
+			string MG_BGMfilename = ReadVariable().StringValue() + ".ogg";
+			string ItaloFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\ItaloRemakes\\");
+			int num = ReadVariable().IntValue();
+			int num2 = ReadVariable().IntValue();
+			float fade = (float)num2;
+			float volume = (float)num / 128f;
+			if (OG_BGMfilename.Length > 4)
+			{
+				OG_BGMFilename = String.Copy(OG_BGMfilename);
+			}
+			if (Console_BGMfilename.Length > 4)
+			{
+				Console_BGMFilename = String.Copy(Console_BGMfilename);
+			}
+			if (MG_BGMfilename.Length > 4)
+			{
+				MG_BGMFilename = String.Copy(MG_BGMfilename);
+			}
+			Italofolder = ItaloFolder;
+			Channel = channel;
+			Volume = volume;
+			Fade = fade;
+			AudioController.Instance.MODGetAudio(OG_BGMfilename, Console_BGMfilename, MG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+			if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1 && File.Exists(ItaloFolder + OG_BGMfilename))
+			{
+				AudioController.Instance.PlayAudio("ItaloRemakes\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, Fade);
+			}
+			else
+			{
+				if (OG_BGMfilename.Length > 4)
+				{
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
+					{
+						AudioController.Instance.PlayAudio(OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
+					{
+						AudioController.Instance.PlayAudio("Original\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
+					{
+						AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5)
+					{
+						AudioController.Instance.PlayAudio("Anime\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+				}
+				if (Console_BGMfilename.Length > 4)
+				{
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
+					{
+						AudioController.Instance.PlayAudio(Console_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+				}
+				if (MG_BGMfilename.Length > 4)
+				{
+					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
+					{
+						AudioController.Instance.PlayAudio(MG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+					}
+				}
+				else
+				{
+					return BurikoVariable.Null;
+				}
+			}
+			return BurikoVariable.Null;
+		}
+
 		private BurikoVariable OperationStopBGM()
 		{
 			SetOperationType("StopBGM");
@@ -477,6 +574,30 @@ namespace Assets.Scripts.Core.Buriko
 			int channel = ReadVariable().IntValue();
 			int time = ReadVariable().IntValue();
 			bool waitForFade = ReadVariable().BoolValue();
+			if (gameSystem.IsSkipping)
+			{
+				AudioController.Instance.StopBGM(channel);
+			}
+			else
+			{
+				AudioController.Instance.FadeOutBGM(channel, time, waitForFade);
+
+			}
+			return BurikoVariable.Null;
+		}
+
+		private BurikoVariable OperationMODFadeOutBGM()
+		{
+			SetOperationType("ModFadeOutBGM");
+			int channel = ReadVariable().IntValue();
+			int time = ReadVariable().IntValue();
+			bool waitForFade = ReadVariable().BoolValue();
+			if (channel == Channel)
+			{
+			OG_BGMFilename = "";
+			Console_BGMFilename = "";
+			MG_BGMFilename = "";
+			}
 			if (gameSystem.IsSkipping)
 			{
 				AudioController.Instance.StopBGM(channel);
@@ -2160,6 +2281,12 @@ namespace Assets.Scripts.Core.Buriko
 				return OperationMODGetHighestChapterFlag();
 			case BurikoOperations.ModSetMainFontOutlineWidth:
 				return OperationMODSetMainFontOutlineWidth();
+			case BurikoOperations.ModTextbox3SettingLoad:
+				return OperationMODTextbox3SettingLoad();
+			case BurikoOperations.ModPlayBGM:
+				return OperationMODPlayBGM();
+			case BurikoOperations.ModFadeOutBGM:
+				return OperationMODFadeOutBGM();
 			default:
 				ScriptError("Unhandled Operation : " + op);
 				return BurikoVariable.Null;
@@ -2321,6 +2448,27 @@ namespace Assets.Scripts.Core.Buriko
 			int lspace = ReadVariable().IntValue();
 			int fsize = ReadVariable().IntValue();
 			mODMainUIController.ADVModeSettingLoad(name, posx, posy, sizex, sizey, mleft, mtop, mright, mbottom, font, cspace, lspace, fsize);
+			return BurikoVariable.Null;
+		}
+
+		public BurikoVariable OperationMODTextbox3SettingLoad()
+		{
+			SetOperationType("ModTextbox3SettingLoad");
+			MODMainUIController mODMainUIController = new MODMainUIController();
+			string name = ReadVariable().StringValue();
+			int posx = ReadVariable().IntValue();
+			int posy = ReadVariable().IntValue();
+			int sizex = ReadVariable().IntValue();
+			int sizey = ReadVariable().IntValue();
+			int mleft = ReadVariable().IntValue();
+			int mtop = ReadVariable().IntValue();
+			int mright = ReadVariable().IntValue();
+			int mbottom = ReadVariable().IntValue();
+			int font = ReadVariable().IntValue();
+			int cspace = ReadVariable().IntValue();
+			int lspace = ReadVariable().IntValue();
+			int fsize = ReadVariable().IntValue();
+			mODMainUIController.Textbox3SettingLoad(name, posx, posy, sizex, sizey, mleft, mtop, mright, mbottom, font, cspace, lspace, fsize);
 			return BurikoVariable.Null;
 		}
 

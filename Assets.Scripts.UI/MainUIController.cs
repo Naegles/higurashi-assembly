@@ -111,70 +111,58 @@ namespace Assets.Scripts.UI
 
 		private void ShowLayerBackground(float time)
 		{
-			if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 1)
+			if (carretVisible)
 			{
-				if (carretVisible)
-				{
-					ShowCarret();
-				}
-				if (bgLayer != null && bgLayer2 != null)
-				{
-					bgLayer.FadeTo(gameSystem.MessageWindowOpacity, time);
-					bgLayer2.FadeTo(gameSystem.MessageWindowOpacity, time);
-				}
-				else
-				{
-					if (bgLayer == null)
-					{
-						bgLayer = LayerPool.ActivateLayer();
-					}
-					bgLayer.gameObject.layer = LayerMask.NameToLayer("Scene1");
-					bgLayer.SetPriority(62);
-					bgLayer.name = "Window Background 1";
-					bgLayer.IsStatic = true;
-					bgLayer.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-					if (bgLayer2 == null)
-					{
-						bgLayer2 = LayerPool.ActivateLayer();
-					}
-					bgLayer2.gameObject.layer = LayerMask.NameToLayer("Scene2");
-					bgLayer2.SetPriority(62);
-					bgLayer2.name = "Window Background 2";
-					bgLayer2.IsStatic = true;
-					bgLayer2.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
+				ShowCarret();
+			}
+			if (bgLayer != null && bgLayer2 != null)
+			{
+				bgLayer.FadeTo(gameSystem.MessageWindowOpacity, time);
+				bgLayer2.FadeTo(gameSystem.MessageWindowOpacity, time);
 			}
 			else
 			{
-				if (carretVisible)
+				if (bgLayer == null)
 				{
-					ShowCarret();
+					bgLayer = LayerPool.ActivateLayer();
 				}
-				if (bgLayer != null && bgLayer2 != null)
+				bgLayer.gameObject.layer = LayerMask.NameToLayer("Scene1");
+				bgLayer.SetPriority(62);
+				bgLayer.name = "Window Background 1";
+				bgLayer.IsStatic = true;
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
 				{
-					bgLayer.FadeTo(gameSystem.MessageWindowOpacity, time);
-					bgLayer2.FadeTo(gameSystem.MessageWindowOpacity, time);
+					BurikoMemory.Instance.SetGlobalFlag("GADVMode", 0);
+					bgLayer.DrawLayer("Textbox\\1\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
 				}
-				else
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
 				{
-					if (bgLayer == null)
-					{
-						bgLayer = LayerPool.ActivateLayer();
-					}
-					bgLayer.gameObject.layer = LayerMask.NameToLayer("Scene1");
-					bgLayer.SetPriority(62);
-					bgLayer.name = "Window Background 1";
-					bgLayer.IsStatic = true;
-					bgLayer.DrawLayer("windo_filter", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-					if (bgLayer2 == null)
-					{
-						bgLayer2 = LayerPool.ActivateLayer();
-					}
-					bgLayer2.gameObject.layer = LayerMask.NameToLayer("Scene2");
-					bgLayer2.SetPriority(62);
-					bgLayer2.name = "Window Background 2";
-					bgLayer2.IsStatic = true;
-					bgLayer2.DrawLayer("windo_filter", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
+					bgLayer.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
+				}
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
+				{
+					bgLayer.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
+				}
+				if (bgLayer2 == null)
+				{
+					bgLayer2 = LayerPool.ActivateLayer();
+				}
+				bgLayer2.gameObject.layer = LayerMask.NameToLayer("Scene2");
+				bgLayer2.SetPriority(62);
+				bgLayer2.name = "Window Background 2";
+				bgLayer2.IsStatic = true;
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
+				{
+					BurikoMemory.Instance.SetGlobalFlag("GADVMode", 0);
+					bgLayer2.DrawLayer("Textbox\\1\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
+				}
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
+				{
+					bgLayer2.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
+				}
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
+				{
+					bgLayer2.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
 				}
 			}
 		}
@@ -469,25 +457,28 @@ namespace Assets.Scripts.UI
 		public void MODResetLayerBackground()
 		{
 			MODMainUIController mODMainUIController = new MODMainUIController();
-			if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 1)
+			GameSystem.Instance.MainUIController.bgLayer.ReleaseTextures();
+			GameSystem.Instance.MainUIController.bgLayer2.ReleaseTextures();
+			var TextboxValue = BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() + 1;
+			GameSystem.Instance.MainUIController.bgLayer.DrawLayer("Textbox\\" + TextboxValue + "\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+			GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("Textbox\\" + TextboxValue + "\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
 			{
 				BurikoMemory.Instance.SetGlobalFlag("GADVMode", 0);
 				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 2);
-				GameSystem.Instance.MainUIController.bgLayer.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer2.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer.DrawLayer("windo_filter", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
-				GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("windo_filter", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
 				mODMainUIController.NVLModeSettingStore();
 			}
-			else
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
 			{
 				BurikoMemory.Instance.SetGlobalFlag("GADVMode", 1);
 				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 0);
-				GameSystem.Instance.MainUIController.bgLayer.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer2.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
-				GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
 				mODMainUIController.ADVModeSettingStore();
+			}
+			if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
+			{
+				BurikoMemory.Instance.SetGlobalFlag("GADVMode", 1);
+				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 0);
+				mODMainUIController.Textbox3SettingStore();
 			}
 		}
 
@@ -500,8 +491,8 @@ namespace Assets.Scripts.UI
 				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 2);
 				GameSystem.Instance.MainUIController.bgLayer.ReleaseTextures();
 				GameSystem.Instance.MainUIController.bgLayer2.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer.DrawLayer("windo_filter_nvladv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
-				GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("windo_filter_nvladv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+				GameSystem.Instance.MainUIController.bgLayer.DrawLayer("Textbox\\windo_filter_nvladv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+				GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("Textbox\\windo_filter_nvladv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
 				mODMainUIController.NVLADVModeSettingStore();
 			}
 		}
@@ -515,9 +506,18 @@ namespace Assets.Scripts.UI
 				BurikoMemory.Instance.SetGlobalFlag("GLinemodeSp", 0);
 				GameSystem.Instance.MainUIController.bgLayer.ReleaseTextures();
 				GameSystem.Instance.MainUIController.bgLayer2.ReleaseTextures();
-				GameSystem.Instance.MainUIController.bgLayer.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
-				GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("windo_filter_adv", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
-				mODMainUIController.ADVModeSettingStore();
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
+				{
+					GameSystem.Instance.MainUIController.bgLayer.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+					GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+					mODMainUIController.ADVModeSettingStore();
+				}
+				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
+				{
+					GameSystem.Instance.MainUIController.bgLayer.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+					GameSystem.Instance.MainUIController.bgLayer2.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, 0f, /*isBlocking:*/ false);
+					mODMainUIController.Textbox3SettingStore();
+				}
 			}
 		}
 
@@ -531,14 +531,15 @@ namespace Assets.Scripts.UI
 			}
 			if ((BurikoMemory.Instance.GetFlag("LFlagMonitor").IntValue() == 1) | (BurikoMemory.Instance.GetFlag("LFlagMonitor").IntValue() == 2))
 			{
-				string[] array = new string[6]
+				string[] array = new string[7]
 				{
 					"GADVMode",
 					"GAltBGM",
 					"GAltSE",
 					"GAltVoice",
 					"GAltVoicePriority",
-					"GLipSync"
+					"GLipSync",
+					"GItaloVer"
 				};
 				string[] array2 = new string[array.Length];
 				for (int i = 0; i < array.Length; i++)
@@ -617,14 +618,24 @@ namespace Assets.Scripts.UI
 				{
 					text6 = "Game avoid any input now\n";
 				}
+				var AltBGMValue = BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue();
+				var AltBGMDescription = AltBGMValue == 0 ? "07th-Mod Audio Pack" : AltBGMValue == 1 ? "Original [2002]" : AltBGMValue == 2 ? "New Update [2019]" : AltBGMValue == 3 ? "Console" : AltBGMValue == 4 ? "MangaGamer [2009]" : AltBGMValue == 5 ? "Anime" : "Unknown";
+				var AltSEValue = BurikoMemory.Instance.GetGlobalFlag("GAltSEflow").IntValue();
+				var AltSEDescription = AltSEValue == 0 ? "07th-Mod Audio Pack" : AltSEValue == 1 ? "Original [2002]" : AltSEValue == 2 ? "New Update [2019]" : AltSEValue == 3 ? "Console" : AltSEValue == 4 ? "MangaGamer [2009]" : "Unknown";
+				var AudioSwitchValue = BurikoMemory.Instance.GetGlobalFlag("GAudioSwitch").IntValue();
+				var AudioSwitchDescription = AudioSwitchValue == 0 ? "Ask" : AudioSwitchValue == 1 ? "In Progress" : AudioSwitchValue == 2 ? "Don't ask again" : AudioSwitchValue == 3 ? "Keep last used" : "Unknown";
 				var videoOpeningValue = BurikoMemory.Instance.GetGlobalFlag("GVideoOpening").IntValue();
 				var videoOpeningDescription = videoOpeningValue == 0 ? "Unset" : videoOpeningValue == 1 ? "Disabled" : videoOpeningValue == 2 ? "In-game" : videoOpeningValue == 3 ? "At launch + in-game" : "Unknown";
-				string text7 = "[MOD SETTINGS]\nADV-MODE = " + array2[0] + "\nLip-Sync = " + array2[5] + "\nAlternative BGM = " + array2[1] + "\nAlternative BGM Flow = " + array6[2] + array5[2] + "\nAlternative SE = " + array2[2] + "\nAlternative SE Flow = " + array6[3] + array5[3] + "\nAlternative Voice = " + array2[3] + "\nAlternative Voice Priority = " + array2[4] + "\nVoice Matching Level = " + array6[0] + array5[0] + "\nEffect Level = " + array6[1] + array5[1] + "\nVoice Volume = " + text2 + $"\nOP movies = {videoOpeningDescription} ({videoOpeningValue})" + "\n\n[Restore Game Settings]" + text + "\n\n[Status]\n" + text4 + text3 + text5 + text6;
+				var TextboxValue = BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue();
+				string OG_BGM = BurikoScriptFile.OG_BGMFilename;
+				string Console_BGM = BurikoScriptFile.Console_BGMFilename;
+				string MG_BGM = BurikoScriptFile.MG_BGMFilename;
+				string text7 = "[MOD SETTINGS]\nADV-MODE = " + array2[0] + $"\nTextbox Style = {TextboxValue}" + "\nLip-Sync = " + array2[5] + "\nAlternative BGM = " + array2[1] + $"\nAlternative BGM Flow = {AltBGMDescription} ({AltBGMValue})" + "\nItalo Remakes = " + array2[6] + "\nAlternative SE = " + array2[2] + $"\nAlternative SE Flow = {AltSEDescription} ({AltSEValue})" + "\nAlternative Voice = " + array2[3] + "\nAlternative Voice Priority = " + array2[4] + "\nVoice Matching Level = " + array6[0] + array5[0] + "\nEffect Level = " + array6[1] + array5[1] + "\nVoice Volume = " + text2 + $"\nOG BGM = {OG_BGM}" + $"\nConsole BGM = {Console_BGM}" + $"\nMG BGM = {MG_BGM}" + $"\nOP movies = {videoOpeningDescription} ({videoOpeningValue})" + $"\nStartup Audio Switch = {AudioSwitchDescription} ({AudioSwitchValue})" + "\n\n[Restore Game Settings]" + text + "\n\n[Status]\n" + text4 + text3 + text5 + text6;
 				GUI.TextArea(new Rect(0f, 0f, 320f, 1080f), text7, 900);
 			}
 			if (BurikoMemory.Instance.GetFlag("LFlagMonitor").IntValue() == 2)
 			{
-				string text8 = "[Vanilla Hotkey]\nEnter,Return,RightArrow,PageDown : Advance Text\nLeftArrow,Pageup : See Backlog\nESC : Open Menu\nCtrl : Hold Skip Mode\nA : Auto Mode\nS : Toggle Skip Mode\nF : FullScreen\nSpace : Hide Text\nL : Swap Language\nP : Swap Sprites\n\n[MOD Hotkey]\nF1 : ADV-NVL MODE\nF2 : Voice Matching Level\nF3 : Effect Level\nF5 : QuickSave\nF7 : QuickLoad\nF10 : Setting Monitor\nM : Increase Voice Volume\nN : Decrease Voice Volume\n1 : Alternative BGM\n2 : Alternative BGM Flow\n3 : Alternative SE\n4 : Alternative SE Flow\n5 : Alternative Voice\n6 : Alternative Voice Priority\n7 : Lip-Sync\nLShift + F9 : Restore Settings\nLShift + M : Voice Volume MAX\nLShift + N : Voice Volume MIN";
+				string text8 = "[Vanilla Hotkey]\nEnter,Return,RightArrow,PageDown : Advance Text\nLeftArrow,Pageup : See Backlog\nESC : Open Menu\nCtrl : Hold Skip Mode\nA : Auto Mode\nS : Toggle Skip Mode\nF : FullScreen\nSpace : Hide Text\nL : Swap Language\nP : Swap Sprites\n\n[MOD Hotkey]\nF1 : Textbox Style\nF2 : Voice Matching Level\nF3 : Effect Level\nF5 : QuickSave\nF7 : QuickLoad\nF10 : Setting Monitor\nM : Increase Voice Volume\nN : Decrease Voice Volume\n1 : Alternative BGM\n2 : Alternative BGM Flow\n3 : Alternative SE\n4 : Alternative SE Flow\n5 : Alternative Voice\n6 : Alternative Voice Priority\n7 : Lip-Sync\nLShift + F9 : Restore Settings\nLShift + M : Voice Volume MAX\nLShift + N : Voice Volume MIN";
 				GUI.TextArea(new Rect(320f, 0f, 320f, 1080f), text8, 900);
 			}
 			if (BurikoMemory.Instance.GetFlag("LFlagMonitor").IntValue() >= 3)
@@ -651,7 +662,10 @@ namespace Assets.Scripts.UI
 					"GFlagForTest3",
 					"GMOD_DEBUG_MODE",
 					"GLipSync",
-					"GVideoOpening"
+					"GVideoOpening",
+					"GItaloVer",
+					"GAudioSwitch",
+					"GTextbox"
 				};
 				string[] array8 = new string[array7.Length];
 				for (int l = 0; l < array7.Length; l++)

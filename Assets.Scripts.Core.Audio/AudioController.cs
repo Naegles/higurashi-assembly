@@ -1,3 +1,4 @@
+using Assets.Scripts.Core.Buriko;
 using MOD.Scripts.Core;
 using MOD.Scripts.Core.TextWindow;
 using Newtonsoft.Json;
@@ -34,6 +35,8 @@ namespace Assets.Scripts.Core.Audio
 		private readonly Dictionary<int, AudioLayerUnity> channelDictionary = new Dictionary<int, AudioLayerUnity>();
 
 		private Dictionary<AudioType, Dictionary<int, AudioInfo>> currentAudio = new Dictionary<AudioType, Dictionary<int, AudioInfo>>();
+
+		private Dictionary<AudioType, Dictionary<int, MODAudioInfo>> MODcurrentAudio = new Dictionary<AudioType, Dictionary<int, MODAudioInfo>>();
 
 		private GameObject audioParent;
 
@@ -115,6 +118,15 @@ namespace Assets.Scripts.Core.Audio
 				{
 					AudioInfo audioInfo = dictionary[i];
 					PlayAudio(audioInfo.Filename, AudioType.BGM, i, audioInfo.Volume, 0f);
+				}
+			}
+			Dictionary<int, MODAudioInfo> MODdictionary = MODcurrentAudio[AudioType.BGM];
+			for (int l = 0; l < 6; l++)
+			{
+				if (MODdictionary.ContainsKey(l))
+				{
+					MODAudioInfo MODaudioInfo = MODdictionary[l];
+					MODGetAudio(MODAudioInfo.OG_BGMFilename, MODAudioInfo.Console_BGMFilename, MODAudioInfo.MG_BGMFilename, AudioType.BGM, l, MODAudioInfo.BGMVolume, 0f);
 				}
 			}
 			Dictionary<int, AudioInfo> dictionary2 = currentAudio[AudioType.Voice];
@@ -423,12 +435,28 @@ namespace Assets.Scripts.Core.Audio
 				{
 					currentAudio[AudioType.BGM].Remove(channel);
 				}
-				currentAudio[AudioType.BGM].Add(channel, new AudioInfo(volume, filename, channel));
+				{
+					currentAudio[AudioType.BGM].Add(channel, new AudioInfo(volume, filename, channel));
+				}
 			}
 			audioLayerUnity.PlayAudio(filename, type, startvolume, loop);
 			if (fadeintime > 0.05f)
 			{
 				audioLayerUnity.StartVolumeFade(volume, fadeintime);
+			}
+		}
+
+		public void MODGetAudio(string OG_BGMfilename, string Console_BGMfilename, string MG_BGMfilename, AudioType type, int BGMchannel, float BGMvolume, float fadeintime = 0)
+		{
+			{
+				float startvolume = BGMvolume;
+				if (fadeintime > 0f)
+				{
+					fadeintime /= 1000f;
+					startvolume = 0f;
+				}
+				AudioLayerUnity audioLayerUnity = channelDictionary[GetChannelByTypeChannel(type, BGMchannel)];
+				bool loop = type == AudioType.BGM;
 			}
 		}
 

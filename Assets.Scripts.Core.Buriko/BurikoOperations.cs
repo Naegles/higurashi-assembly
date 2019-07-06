@@ -139,6 +139,9 @@ namespace Assets.Scripts.Core.Buriko
 		ModSetChapterJumpFontSize,
 		ModSetHighestChapterFlag,
 		ModGetHighestChapterFlag,
-		ModSetMainFontOutlineWidth
+		ModSetMainFontOutlineWidth,
+		ModTextbox3SettingLoad,
+		ModPlayBGM,
+		ModFadeOutBGM
 	}
 }
