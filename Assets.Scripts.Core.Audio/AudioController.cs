@@ -36,8 +36,6 @@ namespace Assets.Scripts.Core.Audio
 
 		private Dictionary<AudioType, Dictionary<int, AudioInfo>> currentAudio = new Dictionary<AudioType, Dictionary<int, AudioInfo>>();
 
-		private Dictionary<AudioType, Dictionary<int, MODAudioInfo>> MODcurrentAudio = new Dictionary<AudioType, Dictionary<int, MODAudioInfo>>();
-
 		private GameObject audioParent;
 
 		private byte[] tempSavedAudio;
