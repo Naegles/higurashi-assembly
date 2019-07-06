@@ -130,19 +130,8 @@ namespace Assets.Scripts.UI
 				bgLayer.SetPriority(62);
 				bgLayer.name = "Window Background 1";
 				bgLayer.IsStatic = true;
-				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
-				{
-					BurikoMemory.Instance.SetGlobalFlag("GADVMode", 0);
-					bgLayer.DrawLayer("Textbox\\1\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
-				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
-				{
-					bgLayer.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
-				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
-				{
-					bgLayer.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
+				var TextboxValue = BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() + 1;
+				bgLayer.DrawLayer("Textbox\\" + TextboxValue + "\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
 				if (bgLayer2 == null)
 				{
 					bgLayer2 = LayerPool.ActivateLayer();
@@ -151,23 +140,15 @@ namespace Assets.Scripts.UI
 				bgLayer2.SetPriority(62);
 				bgLayer2.name = "Window Background 2";
 				bgLayer2.IsStatic = true;
+				bgLayer2.DrawLayer("Textbox\\" + TextboxValue + "\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
 				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 0)
 				{
 					BurikoMemory.Instance.SetGlobalFlag("GADVMode", 0);
-					bgLayer2.DrawLayer("Textbox\\1\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
-				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 1)
-				{
-					bgLayer2.DrawLayer("Textbox\\2\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
-				}
-				if (BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue() == 2)
-				{
-					bgLayer2.DrawLayer("Textbox\\3\\textbox", 0, 0, 0, null, gameSystem.MessageWindowOpacity, /*isBustshot:*/ false, 0, time, /*isBlocking:*/ false);
 				}
 			}
 		}
 
-		private void HideLayerBackground(float time)
+		public void HideLayerBackground(float time)
 		{
 			if (bgLayer == null || !bgLayer.IsInUse)
 			{
