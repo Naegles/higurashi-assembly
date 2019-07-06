@@ -120,15 +120,6 @@ namespace Assets.Scripts.Core.Audio
 					PlayAudio(audioInfo.Filename, AudioType.BGM, i, audioInfo.Volume, 0f);
 				}
 			}
-			Dictionary<int, MODAudioInfo> MODdictionary = MODcurrentAudio[AudioType.BGM];
-			for (int l = 0; l < 6; l++)
-			{
-				if (MODdictionary.ContainsKey(l))
-				{
-					MODAudioInfo MODaudioInfo = MODdictionary[l];
-					MODGetAudio(MODAudioInfo.OG_BGMFilename, MODAudioInfo.Console_BGMFilename, MODAudioInfo.MG_BGMFilename, AudioType.BGM, l, MODAudioInfo.BGMVolume, 0f);
-				}
-			}
 			Dictionary<int, AudioInfo> dictionary2 = currentAudio[AudioType.Voice];
 			for (int j = 0; j < 8; j++)
 			{
