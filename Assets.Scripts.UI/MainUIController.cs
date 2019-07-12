@@ -1,6 +1,7 @@
 using Assets.Scripts.Core;
 using Assets.Scripts.Core.Buriko;
 using Assets.Scripts.Core.Scene;
+using MOD.Scripts.AudioSwitch;
 using MOD.Scripts.UI;
 using System;
 using System.Collections;
@@ -608,9 +609,9 @@ namespace Assets.Scripts.UI
 				var videoOpeningValue = BurikoMemory.Instance.GetGlobalFlag("GVideoOpening").IntValue();
 				var videoOpeningDescription = videoOpeningValue == 0 ? "Unset" : videoOpeningValue == 1 ? "Disabled" : videoOpeningValue == 2 ? "In-game" : videoOpeningValue == 3 ? "At launch + in-game" : "Unknown";
 				var TextboxValue = BurikoMemory.Instance.GetGlobalFlag("GTextbox").IntValue();
-				string OG_BGM = BurikoScriptFile.OG_BGMFilename;
-				string Console_BGM = BurikoScriptFile.Console_BGMFilename;
-				string MG_BGM = BurikoScriptFile.MG_BGMFilename;
+				string OG_BGM = AudioSwitch.OG_BGMFilename;
+				string Console_BGM = AudioSwitch.Console_BGMFilename;
+				string MG_BGM = AudioSwitch.MG_BGMFilename;
 				string text7 = "[MOD SETTINGS]\nADV-MODE = " + array2[0] + $"\nTextbox Style = {TextboxValue}" + "\nLip-Sync = " + array2[5] + "\nAlternative BGM = " + array2[1] + $"\nAlternative BGM Flow = {AltBGMDescription} ({AltBGMValue})" + "\nItalo Remakes = " + array2[6] + "\nAlternative SE = " + array2[2] + $"\nAlternative SE Flow = {AltSEDescription} ({AltSEValue})" + "\nAlternative Voice = " + array2[3] + "\nAlternative Voice Priority = " + array2[4] + "\nVoice Matching Level = " + array6[0] + array5[0] + "\nEffect Level = " + array6[1] + array5[1] + "\nVoice Volume = " + text2 + $"\nOG BGM = {OG_BGM}" + $"\nConsole BGM = {Console_BGM}" + $"\nMG BGM = {MG_BGM}" + $"\nOP movies = {videoOpeningDescription} ({videoOpeningValue})" + $"\nStartup Audio Switch = {AudioSwitchDescription} ({AudioSwitchValue})" + "\n\n[Restore Game Settings]" + text + "\n\n[Status]\n" + text4 + text3 + text5 + text6;
 				GUI.TextArea(new Rect(0f, 0f, 320f, 1080f), text7, 900);
 			}

@@ -142,6 +142,8 @@ namespace Assets.Scripts.Core.Buriko
 		ModSetMainFontOutlineWidth,
 		ModTextbox3SettingLoad,
 		ModPlayBGM,
-		ModFadeOutBGM
+		ModFadeOutBGM,
+		ModSetAudioSubFolders,
+		ModPlaySE
 	}
 }

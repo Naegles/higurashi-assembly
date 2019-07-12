@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.Core.Audio;
 using Assets.Scripts.Core.Buriko;
+using MOD.Scripts.AudioSwitch;
 using MOD.Scripts.Core;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -399,84 +401,45 @@ namespace Assets.Scripts.Core.State
 					}
 					int num9 = BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue();
 					int num10 = BurikoMemory.Instance.GetGlobalFlag("GAltBGMflowMaxNum").IntValue();
-					string OG_BGM = BurikoScriptFile.OG_BGMFilename;
-					string Console_BGM = BurikoScriptFile.Console_BGMFilename;
-					string MG_BGM = BurikoScriptFile.MG_BGMFilename;
-					int BGM_Channel = BurikoScriptFile.Channel;
-					float BGM_Volume = BurikoScriptFile.Volume;
-					float BGM_Fade = BurikoScriptFile.Fade;
-					string AnimeBGMFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\Anime");
-					if (num9 < num10 && num9 >= 0)
+					string OG_BGM = AudioSwitch.OG_BGMFilename;
+					string Console_BGM = AudioSwitch.Console_BGMFilename;
+					string MG_BGM = AudioSwitch.MG_BGMFilename;
+					int BGM_Channel = AudioSwitch.Channel;
+					float BGM_Volume = AudioSwitch.Volume;
+					float BGM_Fade = AudioSwitch.Fade;
+					string BGMRootFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\");
+					List<string> BGMFolders = new List<string>
+					{ "", "Original", "April2019Update", "Console", "MangaGamer", "Anime" };
+					foreach (string BGMfolder in BGMFolders)
 					{
-						num9++;
-						string str7 = num9.ToString();
-						string str8 = ".ogg";
-						string filename4 = "switchsound/" + str7 + str8;
-						GameSystem.Instance.AudioController.PlaySystemSound(filename4);
-						BurikoMemory.Instance.SetGlobalFlag("GAltBGMflow", num9);
-						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 0)
+						if (num9 == BGMFolders.IndexOf(BGMfolder) - 1 && !(Directory.Exists(BGMRootFolder + BGMfolder)))
 						{
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
-							{
-								AudioController.Instance.PlayAudio(OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
-							{
-								AudioController.Instance.PlayAudio("Original\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
-							{
-								AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
-							{
-								AudioController.Instance.PlayAudio(Console_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
-							{
-								AudioController.Instance.PlayAudio(MG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5 && File.Exists("Anime\\" + OG_BGM))
-							{
-								AudioController.Instance.PlayAudio("Anime\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-							}
-						}
-						return true;
+							num9++;
+						}	
 					}
-					num9 = 0;
+					num9++;
+					if (num9 > num10)
+					{
+						num9 = 0;
+					}
+					string str7 = num9.ToString();
+					string str8 = ".ogg";
+					string filename4 = "switchsound/" + str7 + str8;
+					GameSystem.Instance.AudioController.PlaySystemSound(filename4);
 					BurikoMemory.Instance.SetGlobalFlag("GAltBGMflow", num9);
 					if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 0)
 					{
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
+						List<string> BGMs = new List<string>
+							{ OG_BGM, "Original" + "\\" + OG_BGM, "April2019Update" + "\\" + OG_BGM, "Console" + "\\" + Console_BGM, "MangaGamer" + "\\" + MG_BGM, "Anime" + "\\" + OG_BGM }; //Need to change folders to variables for dehardcoding
+						foreach (string BGM in BGMs)
 						{
-							AudioController.Instance.PlayAudio(OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
-						{
-							AudioController.Instance.PlayAudio("Original\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
-						{
-							AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
-						{
-							AudioController.Instance.PlayAudio(Console_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
-						{
-							AudioController.Instance.PlayAudio(MG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5 && File.Exists("Anime\\" + OG_BGM))
-						{
-							AudioController.Instance.PlayAudio("Anime\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-						}
-						else
-						{
-							return true;
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == BGMs.IndexOf(BGM))
+							{
+								AudioController.Instance.PlayAudio(BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade); ;
+							}
 						}
 					}
-					GameSystem.Instance.AudioController.PlaySystemSound("switchsound/0.ogg");
+					return true;
 				}
 				if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
 				{
@@ -517,19 +480,27 @@ namespace Assets.Scripts.Core.State
 					}
 					int num11 = BurikoMemory.Instance.GetGlobalFlag("GAltSEflow").IntValue();
 					int num12 = BurikoMemory.Instance.GetGlobalFlag("GAltSEflowMaxNum").IntValue();
-					if (num11 < num12 && num11 >= 0)
+					string SERootFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\SE\\");
+					List<string> SEFolders = new List<string>
+					{ "", "Original", "April2019Update", "Console", "MangaGamer" };
+					foreach (string SEfolder in SEFolders)
 					{
-						num11++;
-						string str9 = num11.ToString();
-						string str10 = ".ogg";
-						string filename5 = "switchsound/" + str9 + str10;
-						GameSystem.Instance.AudioController.PlaySystemSound(filename5);
-						BurikoMemory.Instance.SetGlobalFlag("GAltSEflow", num11);
-						return true;
+						if (num11 == SEFolders.IndexOf(SEfolder) - 1 && !(Directory.Exists(SERootFolder + SEfolder)))
+						{
+							num11++;
+						}
 					}
-					num11 = 0;
+					num11++;
+					if (num11 > num12)
+					{
+						num11 = 0;
+					}
+					string str9 = num11.ToString();
+					string str10 = ".ogg";
+					string filename5 = "switchsound/" + str9 + str10;
+					GameSystem.Instance.AudioController.PlaySystemSound(filename5);
 					BurikoMemory.Instance.SetGlobalFlag("GAltSEflow", num11);
-					GameSystem.Instance.AudioController.PlaySystemSound("switchsound/0.ogg");
+					return true;
 				}
 				if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
 				{
@@ -702,41 +673,26 @@ namespace Assets.Scripts.Core.State
 						{
 							return false;
 						}
-						string OG_BGM = BurikoScriptFile.OG_BGMFilename;
-						string Console_BGM = BurikoScriptFile.Console_BGMFilename;
-						string MG_BGM = BurikoScriptFile.MG_BGMFilename;
-						int BGM_Channel = BurikoScriptFile.Channel;
-						float BGM_Volume = BurikoScriptFile.Volume;
-						float BGM_Fade = BurikoScriptFile.Fade;
+						string OG_BGM = AudioSwitch.OG_BGMFilename;
+						string Console_BGM = AudioSwitch.Console_BGMFilename;
+						string MG_BGM = AudioSwitch.MG_BGMFilename;
+						int BGM_Channel = AudioSwitch.Channel;
+						float BGM_Volume = AudioSwitch.Volume;
+						float BGM_Fade = AudioSwitch.Fade;
 						string ItaloFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\ItaloRemakes\\");
 						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1)
 						{
 							BurikoMemory.Instance.SetGlobalFlag("GItaloVer", 0);
 							if (File.Exists(ItaloFolder + OG_BGM))
 							{
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
+								List<string> BGMs = new List<string>
+								{ OG_BGM, "Original" + "\\" + OG_BGM, "April2019Update" + "\\" + OG_BGM, "Console" + "\\" + Console_BGM, "MangaGamer" + "\\" + MG_BGM, "Anime" + "\\" + OG_BGM }; //Need to change folders to variables for dehardcoding
+								foreach (string BGM in BGMs)
 								{
-									AudioController.Instance.PlayAudio(OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
-								{
-									AudioController.Instance.PlayAudio("Original\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
-								{
-									AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
-								{
-									AudioController.Instance.PlayAudio(Console_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
-								{
-									AudioController.Instance.PlayAudio(MG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
-								}
-								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5 && File.Exists("Anime\\" + OG_BGM))
-								{
-									AudioController.Instance.PlayAudio("Anime\\" + OG_BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade);
+									if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == BGMs.IndexOf(BGM))
+									{
+										AudioController.Instance.PlayAudio(BGM, Audio.AudioType.BGM, BGM_Channel, BGM_Volume, BGM_Fade); ;
+									}
 								}
 							}
 							GameSystem.Instance.AudioController.PlaySystemSound("switchsound/disable.ogg");

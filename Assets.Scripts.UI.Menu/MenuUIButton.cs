@@ -3,6 +3,7 @@ using Assets.Scripts.Core.Audio;
 using Assets.Scripts.Core.Buriko;
 using Assets.Scripts.Core.State;
 using Assets.Scripts.UI.Prompt;
+using MOD.Scripts.AudioSwitch;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.Menu
@@ -45,6 +46,7 @@ namespace Assets.Scripts.UI.Menu
 					gameSystem.PopStateStack();
 					GameSystem.Instance.PushStateObject(new StateDialogPrompt(PromptType.DialogTitle, delegate
 					{
+						AudioSwitch.OG_BGMFilename = AudioSwitch.Console_BGMFilename = AudioSwitch.MG_BGMFilename = string.Empty;
 						gameSystem.ClearActions();
 						gameSystem.ClearAllWaits();
 						gameSystem.TextController.ClearText();

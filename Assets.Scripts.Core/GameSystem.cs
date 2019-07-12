@@ -211,6 +211,8 @@ namespace Assets.Scripts.Core
 			}
 		}
 
+		public object BurikoScriptFile { get; internal set; }
+
 		private void Initialize()
 		{
 			Logger.Log("GameSystem: Starting GameSystem");

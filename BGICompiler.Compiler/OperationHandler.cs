@@ -171,6 +171,8 @@ namespace BGICompiler.Compiler
 			paramLookup.Add("ModTextbox3SettingLoad", new OpType(BurikoOperations.ModTextbox3SettingLoad, "siiiiiiiiiiii"));
 			paramLookup.Add("ModPlayBGM", new OpType(BurikoOperations.ModPlayBGM, "isssii"));
 			paramLookup.Add("ModFadeOutBGM", new OpType(BurikoOperations.ModFadeOutBGM, "iib"));
+			paramLookup.Add("ModPlaySE", new OpType(BurikoOperations.ModPlaySE, "isssii"));
+			paramLookup.Add("ModSetAudioSubFolders", new OpType(BurikoOperations.ModSetAudioSubFolders, "ssssss"));
 		}
 
 		public void ParamCheck(string op, BGIParameters param)

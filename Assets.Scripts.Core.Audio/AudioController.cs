@@ -435,20 +435,6 @@ namespace Assets.Scripts.Core.Audio
 			}
 		}
 
-		public void MODGetAudio(string OG_BGMfilename, string Console_BGMfilename, string MG_BGMfilename, AudioType type, int BGMchannel, float BGMvolume, float fadeintime = 0)
-		{
-			{
-				float startvolume = BGMvolume;
-				if (fadeintime > 0f)
-				{
-					fadeintime /= 1000f;
-					startvolume = 0f;
-				}
-				AudioLayerUnity audioLayerUnity = channelDictionary[GetChannelByTypeChannel(type, BGMchannel)];
-				bool loop = type == AudioType.BGM;
-			}
-		}
-
 		private int GetChannelByTypeChannel(AudioType type, int ch)
 		{
 			switch (type)

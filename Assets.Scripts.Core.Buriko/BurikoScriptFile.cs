@@ -5,6 +5,7 @@ using Assets.Scripts.Core.Buriko.VarTypes;
 using Assets.Scripts.Core.Scene;
 using Assets.Scripts.Core.State;
 using Assets.Scripts.UI.Prompt;
+using MOD.Scripts.AudioSwitch;
 using MOD.Scripts.Core;
 using MOD.Scripts.Core.State;
 using MOD.Scripts.UI;
@@ -52,19 +53,19 @@ namespace Assets.Scripts.Core.Buriko
 			private set;
 		}
 
-		public static int Channel;
+//		public static int Channel;
 
-		public static float Volume;
+//		public static float Volume;
 
-		public static string OG_BGMFilename;
+//		public static string OG_BGMFilename;
 
-		public static string Console_BGMFilename;
+//		public static string Console_BGMFilename;
 
-		public static string MG_BGMFilename;
+//		public static string MG_BGMFilename;
 
-		public static string Italofolder;
+//		public static string Italofolder;
 
-		public static float Fade;
+//		public static float Fade;
 
 		public BurikoScriptFile(BurikoScriptSystem system, string filename)
 		{
@@ -487,24 +488,23 @@ namespace Assets.Scripts.Core.Buriko
 			float volume = (float)num / 128f;
 			if (OG_BGMfilename.Length > 4)
 			{
-				OG_BGMFilename = String.Copy(OG_BGMfilename);
+				AudioSwitch.OG_BGMFilename = String.Copy(OG_BGMfilename);
 			}
 			if (Console_BGMfilename.Length > 4)
 			{
-				Console_BGMFilename = String.Copy(Console_BGMfilename);
+				AudioSwitch.Console_BGMFilename = String.Copy(Console_BGMfilename);
 			}
 			if (MG_BGMfilename.Length > 4)
 			{
-				MG_BGMFilename = String.Copy(MG_BGMfilename);
+				AudioSwitch.MG_BGMFilename = String.Copy(MG_BGMfilename);
 			}
-			Italofolder = ItaloFolder;
-			Channel = channel;
-			Volume = volume;
-			Fade = fade;
-			AudioController.Instance.MODGetAudio(OG_BGMfilename, Console_BGMfilename, MG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+			AudioSwitch.ItaloFolder = ItaloFolder;
+			AudioSwitch.Channel = channel;
+			AudioSwitch.Volume = volume;
+			AudioSwitch.Fade = fade;
 			if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1 && File.Exists(ItaloFolder + OG_BGMfilename))
 			{
-				AudioController.Instance.PlayAudio("ItaloRemakes\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, Fade);
+				AudioController.Instance.PlayAudio("ItaloRemakes\\" + OG_BGMfilename, Audio.AudioType.BGM, channel, volume, fade);
 			}
 			else
 			{
@@ -512,33 +512,33 @@ namespace Assets.Scripts.Core.Buriko
 				{
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
 					{
-						AudioController.Instance.PlayAudio(OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio(OG_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
 					{
-						AudioController.Instance.PlayAudio("Original\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio("Original\\" + OG_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
 					{
-						AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5)
 					{
-						AudioController.Instance.PlayAudio("Anime\\" + OG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio("Anime\\" + OG_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 				}
 				if (Console_BGMfilename.Length > 4)
 				{
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
 					{
-						AudioController.Instance.PlayAudio(Console_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio("Console\\" + Console_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 				}
 				if (MG_BGMfilename.Length > 4)
 				{
 					if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
 					{
-						AudioController.Instance.PlayAudio(MG_BGMfilename, Audio.AudioType.BGM, Channel, Volume, (float)num2);
+						AudioController.Instance.PlayAudio("MangaGamer\\" + MG_BGMfilename, Audio.AudioType.BGM, channel, volume, (float)num2);
 					}
 				}
 				else
@@ -591,11 +591,11 @@ namespace Assets.Scripts.Core.Buriko
 			int channel = ReadVariable().IntValue();
 			int time = ReadVariable().IntValue();
 			bool waitForFade = ReadVariable().BoolValue();
-			if (channel == Channel)
+			if (channel == AudioSwitch.Channel)
 			{
-			OG_BGMFilename = "";
-			Console_BGMFilename = "";
-			MG_BGMFilename = "";
+				AudioSwitch.OG_BGMFilename = "";
+				AudioSwitch.Console_BGMFilename = "";
+				AudioSwitch.MG_BGMFilename = "";
 			}
 			if (gameSystem.IsSkipping)
 			{
@@ -627,6 +627,27 @@ namespace Assets.Scripts.Core.Buriko
 			float volume = (float)ReadVariable().IntValue() / 128f;
 			float pan = (float)ReadVariable().IntValue() / 128f;
 			AudioController.Instance.PlaySE(filename, channel, volume, pan);
+			return BurikoVariable.Null;
+		}
+
+		public BurikoVariable OperationMODPlaySE()
+		{
+			SetOperationType("ModPlaySE");
+			int channel = ReadVariable().IntValue();
+			string OG_SE = ReadVariable().StringValue() + ".ogg";
+			string Console_SE = ReadVariable().StringValue() + ".ogg";
+			string MG_SE = ReadVariable().StringValue() + ".ogg";
+			float volume = (float)ReadVariable().IntValue() / 128f;
+			float pan = (float)ReadVariable().IntValue() / 128f;
+			List<string> SEs = new List<string>
+			{ OG_SE, "Original" + "\\" + OG_SE, "April2019Update" + "\\" + OG_SE, "Console" + "\\" + Console_SE, "MangaGamer" + "\\" + MG_SE }; //Need to change folders to variables for dehardcoding
+			foreach (string SE in SEs)
+			{
+				if (BurikoMemory.Instance.GetGlobalFlag("GAltSEflow").IntValue() == SEs.IndexOf(SE))
+				{
+					AudioController.Instance.PlaySE(SE, channel, volume, pan);
+				}
+			}
 			return BurikoVariable.Null;
 		}
 
@@ -2287,6 +2308,8 @@ namespace Assets.Scripts.Core.Buriko
 				return OperationMODPlayBGM();
 			case BurikoOperations.ModFadeOutBGM:
 				return OperationMODFadeOutBGM();
+			case BurikoOperations.ModPlaySE:
+				return OperationMODPlaySE();
 			default:
 				ScriptError("Unhandled Operation : " + op);
 				return BurikoVariable.Null;

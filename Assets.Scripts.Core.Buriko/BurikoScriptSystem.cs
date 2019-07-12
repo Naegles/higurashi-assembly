@@ -1,6 +1,7 @@
 using Assets.Scripts.Core.AssetManagement;
 using Assets.Scripts.Core.Audio;
 using Assets.Scripts.Core.Interfaces;
+using MOD.Scripts.AudioSwitch;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -321,6 +322,14 @@ namespace Assets.Scripts.Core.Buriko
 				File.WriteAllBytes(Path.Combine(MGHelper.GetSavePath(), str + ".dat"), array);
 				saveManager.UpdateSaveSlot(slotnum);
 				GameSystem.Instance.SceneController.WriteScreenshot(Path.Combine(MGHelper.GetSavePath(), str + ".png"));
+				string BGMVolume = AudioSwitch.Volume.ToString();
+				string BGMChannel = AudioSwitch.Channel.ToString();
+				string[] BGMlines = { BGMVolume, AudioSwitch.OG_BGMFilename, AudioSwitch.Console_BGMFilename, AudioSwitch.MG_BGMFilename, BGMChannel };
+				using (StreamWriter outputFile = new StreamWriter(Path.Combine(MGHelper.GetSavePath(), str + "_BGM" + ".txt")))
+				{
+					foreach (var BGMline in BGMlines)
+						outputFile.WriteLine(BGMline);
+				}
 			}
 		}
 
@@ -420,6 +429,42 @@ namespace Assets.Scripts.Core.Buriko
 						if (BurikoMemory.Instance.GetGlobalFlag("GADVMode").IntValue() == 1 && BurikoMemory.Instance.GetGlobalFlag("GLinemodeSp").IntValue() == 0 && BurikoMemory.Instance.GetFlag("NVL_in_ADV").IntValue() == 1)
 						{
 							GameSystem.Instance.MainUIController.MODenableNVLModeINADVMode();
+						}
+						string str = (slotnum < 100) ? ("save" + slotnum.ToString("D3")) : ("qsave" + (slotnum - 100));
+						using (StreamReader sr = new StreamReader(Path.Combine(MGHelper.GetSavePath(), str + "_BGM"+ ".txt")))
+						{
+							AudioSwitch.Volume = Convert.ToSingle(sr.ReadLine());
+							AudioSwitch.OG_BGMFilename = sr.ReadLine().ToString();
+							AudioSwitch.Console_BGMFilename = sr.ReadLine().ToString();
+							AudioSwitch.MG_BGMFilename = sr.ReadLine().ToString();
+							AudioSwitch.Channel = Int32.Parse(sr.ReadLine());
+						}
+						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 0)
+						{
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
+							{
+								AudioController.Instance.PlayAudio(AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
+							{
+								AudioController.Instance.PlayAudio("Original\\" + AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
+							{
+								AudioController.Instance.PlayAudio("April2019Update\\" + AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
+							{
+								AudioController.Instance.PlayAudio("Console\\" + AudioSwitch.Console_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
+							{
+								AudioController.Instance.PlayAudio("MangaGamer\\" + AudioSwitch.MG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
+							if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5)
+							{
+								AudioController.Instance.PlayAudio("Anime\\" + AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							}
 						}
 					}
 				}
