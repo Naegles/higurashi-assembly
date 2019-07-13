@@ -37,6 +37,7 @@ namespace Assets.Scripts.Core.Buriko
 		{
 			string path = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}.dat", slot.ToString("D3")));
 			string path2 = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}.png", slot.ToString("D3")));
+			string path3 = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}_BGM.txt", slot.ToString("D3")));
 			if (File.Exists(path))
 			{
 				File.Delete(path);
@@ -44,6 +45,10 @@ namespace Assets.Scripts.Core.Buriko
 			if (File.Exists(path2))
 			{
 				File.Delete(path2);
+			}
+			if (File.Exists(path3))
+			{
+				File.Delete(path3);
 			}
 			saveList.Remove(slot);
 		}
