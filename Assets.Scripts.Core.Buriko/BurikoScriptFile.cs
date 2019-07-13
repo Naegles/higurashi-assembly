@@ -513,7 +513,7 @@ namespace Assets.Scripts.Core.Buriko
 				{ OG_BGMfilename, "Original" + "\\" + OG_BGMfilename, "April2019Update" + "\\" + OG_BGMfilename, "Console" + "\\" + Console_BGMfilename, "MangaGamer" + "\\" + MG_BGMfilename, "Anime" + "\\" + OG_BGMfilename }; //Need to change folders to variables for dehardcoding
 				foreach (string BGM in BGMs)
 				{
-					if (!BGM.Contains("\\.ogg") || BGM.Length > 4)
+					if (!BGM.Contains("\\.ogg") && BGM.Length > 4)
 					{
 						if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == BGMs.IndexOf(BGM))
 						{
