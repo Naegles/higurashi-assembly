@@ -46,7 +46,7 @@ namespace Assets.Scripts.UI.Menu
 					gameSystem.PopStateStack();
 					GameSystem.Instance.PushStateObject(new StateDialogPrompt(PromptType.DialogTitle, delegate
 					{
-						AudioSwitch.OG_BGMFilename = AudioSwitch.Console_BGMFilename = AudioSwitch.MG_BGMFilename = string.Empty;
+						AudioSwitch.OG_BGMFilename = AudioSwitch.Console_BGMFilename = AudioSwitch.MG_BGMFilename = string.Empty; //AST | Clears stored bgm filenames when returning to main menu
 						gameSystem.ClearActions();
 						gameSystem.ClearAllWaits();
 						gameSystem.TextController.ClearText();

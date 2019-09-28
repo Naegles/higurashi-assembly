@@ -53,20 +53,6 @@ namespace Assets.Scripts.Core.Buriko
 			private set;
 		}
 
-//		public static int Channel;
-
-//		public static float Volume;
-
-//		public static string OG_BGMFilename;
-
-//		public static string Console_BGMFilename;
-
-//		public static string MG_BGMFilename;
-
-//		public static string Italofolder;
-
-//		public static float Fade;
-
 		public BurikoScriptFile(BurikoScriptSystem system, string filename)
 		{
 			scriptSystem = system;
@@ -2690,7 +2676,19 @@ namespace Assets.Scripts.Core.Buriko
 			}
 			if (gameSystem.IsSkipping)
 			{
-				AudioController.Instance.StopBGM(channel);
+				//AST | If OST is true and the flag is correct, and skip is currently used, then the bgm will just stop
+				if (OGBGM == true && BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() != 3 && BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() != 4)
+				{
+					AudioController.Instance.StopBGM(channel);
+				}
+				if (ConsoleBGM == true && BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
+				{
+					AudioController.Instance.StopBGM(channel);
+				}
+				if (MGBGM == true && BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
+				{
+					AudioController.Instance.StopBGM(channel);
+				}
 			}
 			else
 			{

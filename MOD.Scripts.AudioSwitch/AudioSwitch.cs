@@ -42,7 +42,7 @@ namespace MOD.Scripts.AudioSwitch
 		public static float Fade;
 
 		public void ModSetAudioFolders(string OG_Folder, string April2019_Folder, string Console_Folder, string MG_Folder, string Anime_Folder, string Italo_Folder)
-		// AST | On start up, set audio folders based on on what is in init.txt
+		// AST | On start up, set audio folders 1-6 based on what is in init.txt
 		{
 			AudioSwitchData.AudioFolders[0] = Application.streamingAssetsPath;
 			AudioSwitchData.AudioFolders[1] = OG_Folder;

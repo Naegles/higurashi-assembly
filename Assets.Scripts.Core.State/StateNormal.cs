@@ -407,7 +407,7 @@ namespace Assets.Scripts.Core.State
 					int BGM_Channel = AudioSwitch.Channel;
 					float BGM_Volume = AudioSwitch.Volume;
 					float BGM_Fade = AudioSwitch.Fade;
-					//AST | Checks if BGM directory exists, and skips to the next available that does exist
+					//AST | Checks if BGM directory exists, and skips to the next available that does exist, unfortunately if no others exists, the same track will restart with every button press
 					List<string> BGMFolders = new List<string>
 					{ "", AudioSwitchData.AudioFolders[1], AudioSwitchData.AudioFolders[2], AudioSwitchData.AudioFolders[3], AudioSwitchData.AudioFolders[4], AudioSwitchData.AudioFolders[5] };
 					foreach (string BGMfolder in BGMFolders)
@@ -481,6 +481,7 @@ namespace Assets.Scripts.Core.State
 					}
 					int num11 = BurikoMemory.Instance.GetGlobalFlag("GAltSEflow").IntValue();
 					int num12 = BurikoMemory.Instance.GetGlobalFlag("GAltSEflowMaxNum").IntValue();
+					//AST | Same as BGM, checks for SE folder, skips to next available one that folder exists for
 					List<string> SEFolders = new List<string>
 					{ "", AudioSwitchData.AudioFolders[1], AudioSwitchData.AudioFolders[2], AudioSwitchData.AudioFolders[3], AudioSwitchData.AudioFolders[4] };
 					foreach (string SEfolder in SEFolders)
@@ -659,7 +660,7 @@ namespace Assets.Scripts.Core.State
 						}
 						MODSystem.instance.modTextureController.ToggleArtStyle();
 					}
-					if (Input.GetKeyDown(KeyCode.I))
+					if (Input.GetKeyDown(KeyCode.I)) //AST | Hotkey to toggle between using Italo's remakes in place of what would play normally, if no version exists for the current section, it will instead play the current OST
 					{
 						if (!gameSystem.MessageBoxVisible || gameSystem.IsAuto || gameSystem.IsSkipping || gameSystem.IsForceSkip)
 						{

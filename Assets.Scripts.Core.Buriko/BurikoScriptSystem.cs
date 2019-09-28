@@ -443,15 +443,14 @@ namespace Assets.Scripts.Core.Buriko
 							AudioSwitch.Channel = Int32.Parse(sr.ReadLine());
 						}
 						//AST | Same as ModPlayBGM op, checks if italo flag is 1 and italo version of bgm exists and if both true plays, else plays what BGM is currently selected, allows saving while playing 1 OST and loading with another selected and the correct bgm plays
-						string ItaloFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\ItaloRemakes\\"); //Remove this after dehardcoding and changing ItaloFolder below variable
-						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1 && File.Exists(ItaloFolder + AudioSwitch.OG_BGMFilename))
+						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1 && File.Exists(AudioSwitchData.BGMRoot_Folder + "\\" + AudioSwitchData.AudioFolders[6] + "\\" + AudioSwitch.OG_BGMFilename))
 						{
-							AudioController.Instance.PlayAudio("ItaloRemakes\\" + AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
+							AudioController.Instance.PlayAudio(AudioSwitchData.AudioFolders[6] + "\\" + AudioSwitch.OG_BGMFilename, Audio.AudioType.BGM, AudioSwitch.Channel, AudioSwitch.Volume, AudioSwitch.Fade);
 						}
 						else
 						{
 							List<string> BGMs = new List<string>
-							{ AudioSwitch.OG_BGMFilename, "Original" + "\\" + AudioSwitch.OG_BGMFilename, "April2019Update" + "\\" + AudioSwitch.OG_BGMFilename, "Console" + "\\" + AudioSwitch.Console_BGMFilename, "MangaGamer" + "\\" + AudioSwitch.MG_BGMFilename, "Anime" + "\\" + AudioSwitch.OG_BGMFilename }; //Need to change folders to variables for dehardcoding
+							{ AudioSwitch.OG_BGMFilename, AudioSwitchData.AudioFolders[1] + "\\" + AudioSwitch.OG_BGMFilename, AudioSwitchData.AudioFolders[2] + "\\" + AudioSwitch.OG_BGMFilename, AudioSwitchData.AudioFolders[3] + "\\" + AudioSwitch.Console_BGMFilename, AudioSwitchData.AudioFolders[4] + "\\" + AudioSwitch.MG_BGMFilename, AudioSwitchData.AudioFolders[5] + "\\" + AudioSwitch.OG_BGMFilename };
 							foreach (string BGM in BGMs)
 							{
 								if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == BGMs.IndexOf(BGM))
