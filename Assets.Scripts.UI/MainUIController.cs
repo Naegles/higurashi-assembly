@@ -600,6 +600,7 @@ namespace Assets.Scripts.UI
 				{
 					text6 = "Game avoid any input now\n";
 				}
+				// AST | below are variables for the settings menu to show the name of the soundtrack as well as the flag number, along with some test entries to show what the stored bgm filenames are
 				var AltBGMValue = BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue();
 				var AltBGMDescription = AltBGMValue == 0 ? "07th-Mod Audio Pack" : AltBGMValue == 1 ? "Original [2002]" : AltBGMValue == 2 ? "New Update [2019]" : AltBGMValue == 3 ? "Console" : AltBGMValue == 4 ? "MangaGamer [2009]" : AltBGMValue == 5 ? "Anime" : "Unknown";
 				var AltSEValue = BurikoMemory.Instance.GetGlobalFlag("GAltSEflow").IntValue();

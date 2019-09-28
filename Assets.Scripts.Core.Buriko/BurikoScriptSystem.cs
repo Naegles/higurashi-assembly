@@ -326,6 +326,7 @@ namespace Assets.Scripts.Core.Buriko
 				string BGMVolume = AudioSwitch.Volume.ToString();
 				string BGMChannel = AudioSwitch.Channel.ToString();
 				string[] BGMlines = { BGMVolume, AudioSwitch.OG_BGMFilename, AudioSwitch.Console_BGMFilename, AudioSwitch.MG_BGMFilename, BGMChannel };
+				//AST | Writes info on BGMs in current section to text file (I didn't know how to properly store to existing save system, this was done as a bandaid solution until that was figured out)
 				using (StreamWriter outputFile = new StreamWriter(Path.Combine(MGHelper.GetSavePath(), str + "_BGM" + ".txt")))
 				{
 					foreach (var BGMline in BGMlines)
@@ -432,6 +433,7 @@ namespace Assets.Scripts.Core.Buriko
 							GameSystem.Instance.MainUIController.MODenableNVLModeINADVMode();
 						}
 						string str = (slotnum < 100) ? ("save" + slotnum.ToString("D3")) : ("qsave" + (slotnum - 100));
+						//AST | Reads info from text file containing BGM info
 						using (StreamReader sr = new StreamReader(Path.Combine(MGHelper.GetSavePath(), str + "_BGM"+ ".txt")))
 						{
 							AudioSwitch.Volume = Convert.ToSingle(sr.ReadLine());
@@ -440,6 +442,7 @@ namespace Assets.Scripts.Core.Buriko
 							AudioSwitch.MG_BGMFilename = sr.ReadLine().ToString();
 							AudioSwitch.Channel = Int32.Parse(sr.ReadLine());
 						}
+						//AST | Same as ModPlayBGM op, checks if italo flag is 1 and italo version of bgm exists and if both true plays, else plays what BGM is currently selected, allows saving while playing 1 OST and loading with another selected and the correct bgm plays
 						string ItaloFolder = Path.Combine(MODSystem.BaseDirectory, "StreamingAssets\\BGM\\ItaloRemakes\\"); //Remove this after dehardcoding and changing ItaloFolder below variable
 						if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1 && File.Exists(ItaloFolder + AudioSwitch.OG_BGMFilename))
 						{

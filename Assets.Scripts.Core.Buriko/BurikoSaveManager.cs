@@ -37,7 +37,7 @@ namespace Assets.Scripts.Core.Buriko
 		{
 			string path = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}.dat", slot.ToString("D3")));
 			string path2 = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}.png", slot.ToString("D3")));
-			string path3 = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}_BGM.txt", slot.ToString("D3")));
+			string path3 = Path.Combine(MGHelper.GetSavePath(), string.Format("save{0}_BGM.txt", slot.ToString("D3"))); //AST | text file containing BGM info that was playing at time of save
 			if (File.Exists(path))
 			{
 				File.Delete(path);

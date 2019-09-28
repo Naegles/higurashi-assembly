@@ -1,13 +1,26 @@
-﻿using Assets.Scripts.Core.Audio;
-using Assets.Scripts.Core.Buriko;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Text;
+using UnityEngine;
 
 namespace MOD.Scripts.AudioSwitch
 {
-	[Serializable]
+	public class AudioSwitchData
+	{
+		public static AudioSwitchData Instance
+		{
+			get;
+			private set;
+		}
+
+		//Folders
+		public static string[] AudioFolders = new string[7];
+
+		public static string BGMRoot_Folder;
+
+		public static string SERoot_Folder;
+	}
+
+		[Serializable]
 	public class AudioSwitch
 	{
 		public static AudioSwitch Instance
@@ -26,68 +39,20 @@ namespace MOD.Scripts.AudioSwitch
 
 		public static string MG_BGMFilename;
 
-		public static string BGMRootFolder;
-
-		public static string OriginalFolder;
-
-		public static string April2019UpdateFolder;
-
-		public static string ConsoleFolder;
-
-		public static string MangaGamerFolder;
-
-		public static string AnimeFolder;
-
-		public static string ItaloFolder;
-
 		public static float Fade;
 
-		public void PlayBGM()
+		public void ModSetAudioFolders(string OG_Folder, string April2019_Folder, string Console_Folder, string MG_Folder, string Anime_Folder, string Italo_Folder)
+		// AST | On start up, set audio folders based on on what is in init.txt
 		{
-			List<string> BGMs = new List<string>
-			{ OG_BGMFilename, OriginalFolder + "\\" + OG_BGMFilename, April2019UpdateFolder + "\\" + OG_BGMFilename, ConsoleFolder + "\\" + Console_BGMFilename, MangaGamerFolder + "\\" + MG_BGMFilename, AnimeFolder + "\\" + OG_BGMFilename };
-			foreach (string BGM in BGMs)
-			{
-				if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == BGMs.IndexOf(BGM))
-				{
-					AudioController.Instance.PlayAudio(BGM, AudioType.BGM, Channel, Volume, Fade);
-				}
-			}
+			AudioSwitchData.AudioFolders[0] = Application.streamingAssetsPath;
+			AudioSwitchData.AudioFolders[1] = OG_Folder;
+			AudioSwitchData.AudioFolders[2] = April2019_Folder;
+			AudioSwitchData.AudioFolders[3] = Console_Folder;
+			AudioSwitchData.AudioFolders[4] = MG_Folder;
+			AudioSwitchData.AudioFolders[5] = Anime_Folder;
+			AudioSwitchData.AudioFolders[6] = Italo_Folder;
+			AudioSwitchData.BGMRoot_Folder = Path.Combine(AudioSwitchData.AudioFolders[0], "BGM\\"); ;
+			AudioSwitchData.SERoot_Folder = Path.Combine(AudioSwitchData.AudioFolders[0], "SE\\"); ;
 		}
-
-			//	if (BurikoMemory.Instance.GetGlobalFlag("GItaloVer").IntValue() == 1)
-			//{
-			//	BurikoMemory.Instance.SetGlobalFlag("GItaloVer", 0);
-			//	if (File.Exists(BGMRootFolder + ItaloFolder + OG_BGMFilename))
-			//	{
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 0)
-			//		{
-			//			AudioController.Instance.PlayAudio(OG_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 1)
-			//		{
-			//			AudioController.Instance.PlayAudio("Original\\" + OG_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 2)
-			//		{
-			//			AudioController.Instance.PlayAudio("April2019Update\\" + OG_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 3)
-			//		{
-			//			AudioController.Instance.PlayAudio("Console\\" + Console_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 4)
-			//		{
-			//			AudioController.Instance.PlayAudio("MangaGamer\\" + MG_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//		if (BurikoMemory.Instance.GetGlobalFlag("GAltBGMflow").IntValue() == 5)
-			//		{
-			//			AudioController.Instance.PlayAudio("Anime\\" + OG_BGMFilename, AudioType.BGM, Channel, Volume, Fade);
-			//		}
-			//	}
-
-			//	return;
-		//	}
-		//}
 	}
 }
