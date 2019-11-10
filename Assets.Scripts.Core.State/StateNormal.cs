@@ -1,10 +1,11 @@
-﻿using Assets.Scripts.Core.Audio;
-using Assets.Scripts.Core.Buriko;
+﻿using Assets.Scripts.Core.Buriko;
 using MOD.Scripts.AudioSwitch;
+using Assets.Scripts.Core.Audio;
 using MOD.Scripts.Core;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Core.State
 {
@@ -53,6 +54,12 @@ namespace Assets.Scripts.Core.State
 			{
 				gameSystem.IsSkipping = false;
 				gameSystem.IsForceSkip = false;
+			}
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				var voices = gameSystem.TextHistory.LatestVoice;
+				AudioController.Instance.PlayVoices(voices);
+				return false;
 			}
 			if (Input.GetKeyDown(KeyCode.Space))
 			{

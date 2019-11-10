@@ -7,12 +7,14 @@ using Assets.Scripts.Core.State;
 using Assets.Scripts.UI.Prompt;
 using MOD.Scripts.AudioSwitch;
 using MOD.Scripts.Core;
+using MOD.Scripts.Core.Scene;
 using MOD.Scripts.Core.State;
 using MOD.Scripts.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Core.Buriko
@@ -2169,6 +2171,8 @@ namespace Assets.Scripts.Core.Buriko
 				return OperationMODGetHighestChapterFlag();
 			case BurikoOperations.ModSetMainFontOutlineWidth:
 				return OperationMODSetMainFontOutlineWidth();
+			case BurikoOperations.ModSetLayerFilter:
+				return OperationMODSetLayerFilter();
 			case BurikoOperations.ModTextbox3SettingLoad:
 				return OperationMODTextbox3SettingLoad();
 			case BurikoOperations.ModPlayBGM:
@@ -2189,7 +2193,10 @@ namespace Assets.Scripts.Core.Buriko
 		{
 			SetOperationType("Operation");
 			BurikoOperations op = (BurikoOperations)dataReader.ReadInt16();
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			ExecuteOperation(op);
+			watch.Stop();
+			MODUtility.FlagMonitorOnlyLog("Executed " + opType + " in " + watch.ElapsedMilliseconds + "ms");
 		}
 
 		private void CommandDeclaration()
@@ -2588,6 +2595,51 @@ namespace Assets.Scripts.Core.Buriko
 			return BurikoVariable.Null;
 		}
 
+		private BurikoVariable OperationMODSetLayerFilter()
+		{
+			SetOperationType("MODSetLayerFilter");
+			int layer = ReadVariable().IntValue();
+			int alpha = ReadVariable().IntValue();
+			string color = ReadVariable().StringValue();
+			MODSceneController.Filter filter;
+			switch (color.ToLower())
+			{
+				case "":
+				case "none":
+					filter = MODSceneController.Filter.Identity;
+					break;
+				case "flashback":
+					filter = MODSceneController.Filter.Flashback;
+					break;
+				case "night":
+					filter = MODSceneController.Filter.Night;
+					break;
+				case "sunset":
+					filter = MODSceneController.Filter.Sunset;
+					break;
+				default:
+					try
+					{
+						var split = color.Split(',').Select(Int32.Parse).ToArray();
+						if (split.Length == 3)
+						{
+							filter = new MODSceneController.Filter(split[0], 0, 0, 0, split[1], 0, 0, 0, split[2], 256);
+							break;
+						}
+						else if (split.Length == 9)
+						{
+							filter = new MODSceneController.Filter(split[0], split[1], split[2], split[3], split[4], split[5], split[6], split[7], split[8], 256);
+							break;
+						}
+					}
+					catch (FormatException) { }
+					throw new ArgumentException("Invalid color given to MODSetLayerFilter: " + color);
+			}
+			filter.a = (short)alpha;
+			MODSceneController.SetLayerFilter(layer, filter);
+			return BurikoVariable.Null;
+		}
+
 		public BurikoVariable OperationMODPlayBGM()
 		{
 			SetOperationType("ModPlayBGM");
@@ -2742,7 +2794,6 @@ namespace Assets.Scripts.Core.Buriko
 			string Anime_Folder = ReadVariable().StringValue();
 			string Italo_Folder = ReadVariable().StringValue();
 			audioSwitch.ModSetAudioFolders(OG_Folder, April2019_Folder, Console_Folder, MG_Folder, Anime_Folder, Italo_Folder);
-			return BurikoVariable.Null;
 		}
 	}
 }
