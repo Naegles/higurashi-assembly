@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Core;
+using Assets.Scripts.Core.AssetManagement;
 using Assets.Scripts.Core.Buriko;
 using Assets.Scripts.Core.Scene;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace MOD.Scripts.Core.Scene
 			public static readonly Filter Identity = new Filter(256, 0, 0, 0, 256, 0, 0, 0, 256, 256);
 			public static readonly Filter Flashback = new Filter(117, 127, 39, 58, 171, 20, 69, 107, 40, 256); // 77 47 4 preserving luminosity
 			public static readonly Filter Night = new Filter(222, 0, 0, 0, 222, 0, 0, 0, 256, 256);
-			public static readonly Filter Sunset = new Filter(240, 0, 0, 0, 200, 0, 0, 0, 180, 256);
+			public static readonly Filter Sunset = new Filter(250, 0, 0, 0, 210, 0, 0, 0, 180, 256);
 
 			public int rr;
 			public int rg;
@@ -313,7 +314,7 @@ namespace MOD.Scripts.Core.Scene
 
 		public bool MODLipSyncIsEnabled()
 		{
-			if (BurikoMemory.Instance.GetGlobalFlag("GArtStyle").IntValue() == 0)
+			if (AssetManager.Instance.CurrentArtset.paths.SequenceEqual(AssetManager.Instance.GetArtset(0).paths))
 			{
 				return BurikoMemory.Instance.GetGlobalFlag("GLipSync").IntValue() == 1;
 			}
