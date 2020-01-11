@@ -2805,6 +2805,8 @@ namespace Assets.Scripts.Core.Buriko
 			string Anime_Folder = ReadVariable().StringValue();
 			string Italo_Folder = ReadVariable().StringValue();
 			audioSwitch.ModSetAudioFolders(OG_Folder, April2019_Folder, Console_Folder, MG_Folder, Anime_Folder, Italo_Folder);
+			return BurikoVariable.Null;
+
 		}
 	}
 }
